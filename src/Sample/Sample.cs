@@ -5,6 +5,9 @@ IPluginを継承する何もしないプラグイン
 参考に適切なプラグインベースを継承して作ってください。
 
 **/
+using System.Reflection;
+using System.Windows;
+
 using YukkuriMovieMaker.Plugin;
 
 namespace Ymm4PluginSample;
@@ -13,7 +16,15 @@ namespace Ymm4PluginSample;
 //[manju-summoner/YukkuriMovieMaker4PluginSamples: YMM4用プラグインのサンプル集です](https://github.com/manju-summoner/YukkuriMovieMaker4PluginSamples)
 
 [PluginDetails(AuthorName = "", ContentId = "")]
-public class Sample : IPlugin
+public class Sample : IToolPlugin
 {
-    public string Name => "プラグインテンプレート";
+	public Sample()
+	{
+		Console.WriteLine("Sample");
+	}
+
+	public Type ViewModelType => typeof(ToolViewModel);
+	public Type ViewType => typeof(ToolView);
+
+	public string Name => "プロジェクト情報の取得";
 }

@@ -40,6 +40,14 @@
       <Private>false</Private>
       <CopyLocal>false</CopyLocal>
     </Reference>
+    <Reference Include="$(YMM4_PATH)\ReactiveProperty.dll">
+      <Private>false</Private>
+      <CopyLocal>false</CopyLocal>
+    </Reference>
+    <Reference Include="$(YMM4_PATH)\ReactiveProperty.Core.dll">
+      <Private>false</Private>
+      <CopyLocal>false</CopyLocal>
+    </Reference>
   </ItemGroup>
 
   <!-- MS Build settings -->
