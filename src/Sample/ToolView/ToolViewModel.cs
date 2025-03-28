@@ -13,6 +13,7 @@ namespace Ymm4PluginSample;
 public class ToolViewModel
 {
 	// Loadedイベントを受信するためのCommandプロパティの定義
+	// ※サンプルではEpoxy使ってますが、他にも色んな方法があります
 	public Command? Ready { get; private set; }
 
 	public ReadOnlyReactivePropertySlim<string>? ProjectName { get; set; }
@@ -44,6 +45,8 @@ public class ToolViewModel
 			// メインウィンドウのDataContext（ViewModel）を取得
 			dynamic viewModel = mainWindow.DataContext;
 
+			/// メインウィンドウのViewModelから色々情報が取れます
+
 			Debug.WriteLine($"viewModel.Title: {GetProp(viewModel, nameof(viewModel.Title))}");
 			Debug.WriteLine($"""
 				viewModel.WindowState:
@@ -56,14 +59,21 @@ public class ToolViewModel
 			Debug.WriteLine($"viewModel.IsEmptyProject: {GetProp(viewModel, nameof(viewModel.IsEmptyProject))}");
 			Debug.WriteLine($"viewModel.IsSaved: {GetProp(viewModel, nameof(viewModel.IsSaved))}");
 			Debug.WriteLine($"viewModel.KeepProjectPath: {GetProp(viewModel, nameof(viewModel.KeepProjectPath))}");
-			//Debug.WriteLine($"viewModel.ProjectFilePath: {GetProp(viewModel, nameof(viewModel.ProjectFilePath))}");
+			Debug.WriteLine($"viewModel.ProjectFilePath: {GetProp(viewModel, nameof(viewModel.ProjectFilePath))}");
+
+			/// StatusBarからプロジェクト情報を取得
+			/// ReactiveProperty化されているのでBindするだけで自動で反映されます
+			/// StatusBarは非表示でも情報取れます
 
 			var sb = GetProp(viewModel, nameof(viewModel.StatusBarViewModel));
 			var val = GetProp(sb, nameof(viewModel.StatusBarViewModel.Value));
 
 			Debug.WriteLine($"viewModel.StatusBarViewModel.Value.ProjectName :{GetProp(val, nameof(val.ProjectName))}");
 
-			//bind properties
+			/// 取得したプロパティをBindする
+			/// ProjectName 以外はプロジェクトを読み込み直すとBindが途切れるようです
+			/// TODO: ProjectNameが変更されたらReBindするような処理が必要
+
 			ProjectName = GetProp(val, nameof(val.ProjectName));
 			CurrentFrame = GetProp(val, nameof(val.CurrentFrame));
 			TotalFrame = GetProp(val, nameof(val.TotalFrame));
@@ -71,8 +81,11 @@ public class ToolViewModel
 			TotalTime = GetProp(val, nameof(val.TotalTime));
 			VideoInfo = GetProp(val, nameof(val.VideoInfo));
 
+			/// 情報として無理やりタイムライン上の情報も取れます
+
 			var tla = GetProp(viewModel, nameof(viewModel.TimelineAreaViewModel));
 			var talv = GetProp(tla, nameof(viewModel.TimelineAreaViewModel.ViewModel));
+			//タイミングによって取得できないのでnullチェックが必要
 			if (talv is null) return;
 			var talvv = GetProp(talv, nameof(viewModel.TimelineAreaViewModel.Value));
 			if (talvv is null) return;
@@ -88,10 +101,9 @@ public class ToolViewModel
 	static Window GetYmmMainWindow()
 	{
 		List<dynamic> windows = [.. Application.Current.Windows];
-		Window? mainWindow = windows
+		return windows
 			.OfType<Window>()
 			.First(w => string.Equals(w.GetType().FullName, "YukkuriMovieMaker.Views.MainView", StringComparison.Ordinal));
-		return mainWindow;
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3011:Reflection should not be used to increase accessibility of classes, methods, or fields", Justification = "<保留中>")]
