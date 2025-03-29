@@ -35,6 +35,10 @@ public class ToolViewModel
 		});
 	}
 
+	/// YMM4本体が更新されると機能しなくなる可能性が高いです
+	/// そのため、YMM4本体のバージョンを見て動作確認されたバージョンだけ機能する
+	/// 形が望ましいです
+
 	void GetMainWindow()
 	{
 		// メインウィンドウを取得
@@ -48,13 +52,14 @@ public class ToolViewModel
 			/// メインウィンドウのViewModelから色々情報が取れます
 
 			Debug.WriteLine($"viewModel.Title: {GetProp(viewModel, nameof(viewModel.Title))}");
+			var state = GetProp(viewModel, nameof(viewModel.WindowState));
 			Debug.WriteLine($"""
 				viewModel.WindowState:
-					x: {GetProp(viewModel, nameof(viewModel.WindowState.X))}
-					y: {GetProp(viewModel, nameof(viewModel.WindowState.Y))}
-					width: {GetProp(viewModel, nameof(viewModel.WindowState.Width))}
-					height: {GetProp(viewModel, nameof(viewModel.WindowState.Height))}
-					IsMaximized: {GetProp(viewModel, nameof(viewModel.WindowState.IsMaximized))}
+					x: {GetProp(state, nameof(viewModel.WindowState.X))}
+					y: {GetProp(state, nameof(viewModel.WindowState.Y))}
+					width: {GetProp(state, nameof(viewModel.WindowState.Width))}
+					height: {GetProp(state, nameof(viewModel.WindowState.Height))}
+					IsMaximized: {GetProp(state, nameof(viewModel.WindowState.IsMaximized))}
 				""");
 			Debug.WriteLine($"viewModel.IsEmptyProject: {GetProp(viewModel, nameof(viewModel.IsEmptyProject))}");
 			Debug.WriteLine($"viewModel.IsSaved: {GetProp(viewModel, nameof(viewModel.IsSaved))}");
